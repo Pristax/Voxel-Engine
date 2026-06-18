@@ -18,7 +18,7 @@ class Camera:
 		self.update_view_matrix()
 
 	def update_view_matrix(self):
-		self.m_view = glm.lookAt(self.position, self.position * self.forward, self.up)
+		self.m_view = glm.lookAt(self.position, self.position + self.forward, self.up)
 
 	def update_vectors(self):
 		self.forward.x = glm.cos(self.yaw) * glm.cos(self.pitch)
