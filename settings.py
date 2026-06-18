@@ -8,7 +8,7 @@ WIN_RESOLUTION = glm.vec2(1600, 900)
 # camera
 ASPECT_RATIO = WIN_RESOLUTION.x / WIN_RESOLUTION.y
 FOG_DEG = 50
-V_FOV = glm.radians(FOV_DEG) # vertical fov
+V_FOV = glm.radians(FOG_DEG) # vertical fov
 H_FOV = 2 * math.atan(math.tan(V_FOV * 0.5) * ASPECT_RATIO) # horizontal fov
 NEAR = 0.1
 FAR = 2000.0
