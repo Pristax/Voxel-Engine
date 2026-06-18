@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\shaders"
+    "\\shaders",
+    "\\world_objects"
   ],
-  "SelectedNode": "\\shaders\\quad.frag",
+  "SelectedNode": "\\world_objects\\chunk.py",
   "PreviewInSolutionExplorer": false
 }
