@@ -2,6 +2,7 @@ import moderngl as mgl
 import pygame as pg
 import sys
 from settings import *
+from main_menu import MainMenu
 from shader_program import ShaderProgram
 from scene import Scene
 from player import Player
@@ -11,12 +12,18 @@ from textures import Textures
 class VoxelEngine:
 	def __init__(self):
 		pg.init()
+
+		menu = MainMenu()
+		menu.run()
+
 		pg.display.gl_set_attribute(pg.GL_CONTEXT_MAJOR_VERSION, 3)
 		pg.display.gl_set_attribute(pg.GL_CONTEXT_MINOR_VERSION, 3)
 		pg.display.gl_set_attribute(pg.GL_CONTEXT_PROFILE_MASK, pg.GL_CONTEXT_PROFILE_CORE)
 		pg.display.gl_set_attribute(pg.GL_DEPTH_SIZE, 24)
 
-		pg.display.set_mode(WIN_RESOLUTION, flags=pg.OPENGL | pg.DOUBLEBUF)
+		WIN_SIZE = int(WIN_RESOLUTION.x), int(WIN_RESOLUTION.y)
+
+		pg.display.set_mode(WIN_SIZE, flags=pg.OPENGL | pg.DOUBLEBUF)
 		self.ctx = mgl.create_context()
 
 		self.ctx.enable(flags=mgl.DEPTH_TEST | mgl.CULL_FACE | mgl.BLEND)
@@ -30,6 +37,12 @@ class VoxelEngine:
 		pg.mouse.set_visible(False)
 
 		self.is_running = True
+
+		pg.display.set_caption("Loading...")
+		self.ctx.clear(color=(0.0, 0.0, 0.0))
+		pg.display.flip()
+
+
 		self.on_init()
 
 	def on_init(self):
@@ -37,6 +50,8 @@ class VoxelEngine:
 		self.crosshair = Crosshair(self)
 		self.player = Player(self)
 		self.shader_program = ShaderProgram(self)
+
+		pg.display.set_caption("Generating world...")
 		self.scene = Scene(self)
 
 	def update(self):
