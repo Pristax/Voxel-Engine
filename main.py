@@ -28,6 +28,9 @@ class VoxelEngine:
 
 		self.menu = MainMenu(self)
 		self.menu.run()
+		self.menu.destroy()
+
+		self.ctx.enable(flags=mgl.DEPTH_TEST | mgl.CULL_FACE | mgl.BLEND)
 
 		self.clock = pg.time.Clock()
 		self.delta_time = 0
@@ -56,6 +59,7 @@ class VoxelEngine:
 		pg.display.set_caption(f"{self.clock.get_fps() : 0.0f}")
 
 	def render(self):
+
 		self.ctx.clear(color = BG_COLOR)
 		self.scene.render()
 
