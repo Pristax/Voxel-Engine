@@ -1,10 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\assets",
+    "\\assets\\fonts",
     "\\meshes",
     "\\shaders",
     "\\world_objects"
   ],
-  "SelectedNode": "\\main.py",
+  "SelectedNode": "\\main_menu.py",
   "PreviewInSolutionExplorer": false
 }

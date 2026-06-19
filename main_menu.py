@@ -1,13 +1,19 @@
 import pygame as pg
+import moderngl as mgl
+from array import array
 import sys
 from settings import *
 
-class MainMenu:
-	def __init__(self):
-		self.win_size = int(WIN_RESOLUTION.x), int(WIN_RESOLUTION.y)
 
-		self.screen = pg.display.set_mode(self.win_size)
-		pg.display.set_caption("Voxel Engine")
+class MainMenu:
+	def __init__(self, app):
+		self.app = app
+		self.ctx = app.ctx
+
+		self.win_size = int(WIN_RESOLUTION.x), int(WIN_RESOLUTION.y)
+		self.width, self.height = self.win_size
+
+		pg.font.init()
 
 		font_path = "assets/fonts/pixel.ttf"
 
@@ -15,12 +21,54 @@ class MainMenu:
 		self.font_small = pg.font.Font(font_path, 24)
 
 		self.bg_color = (0, 0, 0)
-		self.text_color = (230, 235, 255)
+		self.text_color = (230, 230, 230)
+		self.shadow_color = (90, 90, 90)
+
+		self.program = self.ctx.program(
+			vertex_shader="""
+				#version 330 core
+
+				in vec2 in_pos;
+				in vec2 in_uv;
+
+				out vec2 uv;
+
+				void main() {
+					uv = in_uv;
+					gl_Position = vec4(in_pos, 0.0, 1.0);
+				}
+			""",
+			fragment_shader="""
+				#version 330 core
+
+				uniform sampler2D tex;
+
+				in vec2 uv;
+				out vec4 fragColor;
+
+				void main() {
+					fragColor = texture(tex, uv);
+				}
+			"""
+		)
+
+		vertices = array("f", [
+			-1.0, -1.0,  0.0, 1.0,
+			 1.0, -1.0,  1.0, 1.0,
+			-1.0,  1.0,  0.0, 0.0,
+
+			-1.0,  1.0,  0.0, 0.0,
+			 1.0, -1.0,  1.0, 1.0,
+			 1.0,  1.0,  1.0, 0.0,
+		])
+
+		self.vbo = self.ctx.buffer(vertices.tobytes())
+		self.vao = self.ctx.vertex_array(self.program, [(self.vbo, "2f 2f", "in_pos", "in_uv")])
 
 	def run(self):
-		while True:
-			mouse_pos = pg.mouse.get_pos()
+		clock = pg.time.Clock()
 
+		while True:
 			for event in pg.event.get():
 				if event.type == pg.QUIT:
 					pg.quit()
@@ -32,23 +80,75 @@ class MainMenu:
 						sys.exit()
 
 					if event.key == pg.K_RETURN:
+						self.render_loading("L o a d i n g . . .")
 						return
 
-			self.draw(mouse_pos)
+			self.render()
+			clock.tick(60)
 
-	def draw(self, mouse_pos):
-		self.screen.fill(self.bg_color)
+	def render(self):
+		surface = pg.Surface(self.win_size)
+		surface.fill(self.bg_color)
 
-		title_shadow = self.font_title.render("VOXEL ENGINE", True, (80, 80, 80))
-		title_shadow_rect = title_shadow.get_rect(center=(self.win_size[0] // 2, self.win_size[1] // 2 - 115))
-		self.screen.blit(title_shadow, title_shadow_rect)
+		title_shadow = self.font_title.render("V O X E L  E N G I N E", True, self.shadow_color)
+		title_shadow_rect = title_shadow.get_rect(center=(self.width // 2, self.height // 2 - 115))
+		surface.blit(title_shadow, title_shadow_rect)
 
-		title_surface = self.font_title.render("VOXEL ENGINE", True, self.text_color)
-		title_rect = title_surface.get_rect(center=(self.win_size[0] // 2, self.win_size[1] // 2 - 120))
-		self.screen.blit(title_surface, title_rect)
+		title = self.font_title.render("V O X E L  E N G I N E", True, self.text_color)
+		title_rect = title.get_rect(center=(self.width // 2, self.height // 2 - 120))
+		surface.blit(title, title_rect)
 
-		info_surface = self.font_small.render("Press ENTER to start / ESC to quit", True, self.text_color)
-		info_rect = info_surface.get_rect(center=(self.win_size[0] // 2, self.win_size[1] - 80))
-		self.screen.blit(info_surface, info_rect)
+		info = self.font_small.render("Press ENTER to start", True, self.text_color)
+		info_rect = info.get_rect(center=(self.width // 2, self.height // 2 + 80))
+		surface.blit(info, info_rect)
+
+		esc_info = self.font_small.render("ESC to quit", True, self.shadow_color)
+		esc_info_rect = esc_info.get_rect(center=(self.width // 2, self.height - 80))
+		surface.blit(esc_info, esc_info_rect)
+
+		texture_data = pg.image.tostring(surface, "RGBA", False)
+		texture = self.ctx.texture(self.win_size, 4, texture_data)
+		texture.filter = (mgl.NEAREST, mgl.NEAREST)
+
+		self.ctx.disable(mgl.DEPTH_TEST)
+		self.ctx.disable(mgl.CULL_FACE)
+
+		self.ctx.clear(color = BG_COLOR)
+
+		texture.use(location=0)
+		self.program["tex"] = 0
+		self.vao.render()
 
 		pg.display.flip()
+
+		texture.release()
+
+	def render_loading(self, text = ""):
+		surface = pg.Surface(self.win_size)
+		surface.fill(self.bg_color)
+
+		loading_text = self.font_small.render(text, True, self.text_color)
+		loading_text_rect = loading_text.get_rect(center=(self.width // 2, self.height // 2))
+		surface.blit(loading_text, loading_text_rect)
+
+		texture_data = pg.image.tostring(surface, "RGBA", False)
+		texture = self.ctx.texture(self.win_size, 4, texture_data)
+		texture.filter = (mgl.NEAREST, mgl.NEAREST)
+
+		self.ctx.disable(mgl.DEPTH_TEST)
+		self.ctx.disable(mgl.CULL_FACE)
+
+		self.ctx.clear(color=(0.0, 0.0, 0.0))
+
+		texture.use(location=0)
+		self.program["tex"] = 0
+		self.vao.render()
+
+		pg.display.flip()
+
+		texture.release()
+
+	def destroy(self):
+		self.vao.release()
+		self.vbo.release()
+		self.program.release()
