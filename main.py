@@ -5,6 +5,7 @@ from settings import *
 from shader_program import ShaderProgram
 from scene import Scene
 from player import Player
+from crosshair import Crosshair
 from textures import Textures
 
 class VoxelEngine:
@@ -33,6 +34,7 @@ class VoxelEngine:
 
 	def on_init(self):
 		self.textures = Textures(self)
+		self.crosshair = Crosshair(self)
 		self.player = Player(self)
 		self.shader_program = ShaderProgram(self)
 		self.scene = Scene(self)
@@ -49,6 +51,9 @@ class VoxelEngine:
 	def render(self):
 		self.ctx.clear(color = BG_COLOR)
 		self.scene.render()
+
+		self.crosshair.render()
+
 		pg.display.flip()
 
 	def handle_events(self):
