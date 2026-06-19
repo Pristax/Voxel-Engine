@@ -3,7 +3,12 @@ import numpy as np
 import glm
 import math
 
-WIN_RESOLUTION = glm.vec2(1400, 700)
+# OpenGL settings
+MAJOR_VER, MINOR_VER = 3, 3
+DEPTH_SIZE = 24
+NUM_SAMPLES = 1  # antialiasing
+
+WIN_RESOLUTION = glm.vec2(1900, 800)
 
 # world generation
 SEED = 16
@@ -57,11 +62,19 @@ WOOD = 7
 # terrain levels
 SNOW_LEVEL = 54
 STONE_LEVEL = 48
-DIRT_LEVEL = 40
+DIRT_LEVEL = 44
 GRASS_LEVEL = 8
-SAND_LEVEL = 7
+SAND_LEVEL = 4
 
 # tree settings
 TREE_PROBABILITY = 0.008
 TREE_WIDTH, TREE_HEIGHT = 5, 9
 TREE_H_WIDTH, TREE_H_HEIGHT = TREE_WIDTH // 2, TREE_HEIGHT // 2
+
+# water
+WATER_LINE = 5.6
+WATER_AREA = 5 * CHUNK_SIZE * WORLD_W
+
+# cloud
+CLOUD_SCALE = 25
+CLOUD_HEIGHT = WORLD_H * CHUNK_SIZE * 2
