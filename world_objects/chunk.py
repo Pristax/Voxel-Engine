@@ -164,7 +164,6 @@ class Chunk:
                     if dist > layer_radius * layer_radius + 1:
                         continue
 
-                    # náhodné vykousnutí rohů / okrajů
                     leaf_rand = (
                         px * 734287
                         + py * 912931
@@ -177,7 +176,6 @@ class Chunk:
                     if is_edge and leaf_rand % 100 < 35:
                         continue
 
-                    # neprepisuj kmen uprostřed
                     index = Chunk.get_index_py(px, py, pz)
 
                     if voxels[index] != WOOD:
