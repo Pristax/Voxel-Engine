@@ -1,9 +1,9 @@
 # Voxel-Engine
 A voxel engine built in Python using Pygame, ModernGL, PyGLM, and Numba. It demonstrates basic 3D-style voxel rendering, world generation, block interaction, and real-time movement in a lightweight game-engine prototype. Useful as an educational project for learning graphics, game loops, and voxel-based environments in Python.
 
-<img width="1673" height="892" alt=" 175 20 06 2026 0_21_55" src="https://github.com/user-attachments/assets/0895a859-cb2f-49a9-b031-9aaff419ab25" />
-<img width="1670" height="892" alt="Voxel Engine 20 06 2026 0_20_00" src="https://github.com/user-attachments/assets/04e8c3ee-2925-46b7-a26d-b4fd86379424" />
-
+<img width="1727" height="929" alt="1" src="https://github.com/user-attachments/assets/976411a2-c3c7-4f86-973a-c0bc15159b8f" />
+<img width="1725" height="927" alt="2" src="https://github.com/user-attachments/assets/b84f6715-a7bd-4364-b0aa-e9d2edbf6864" />
+<img width="1724" height="927" alt="3" src="https://github.com/user-attachments/assets/b6d48c34-7a65-4a4c-8f62-6f1a93025e93" />
 
 ## Built With
 - Python 3.12.0
@@ -17,4 +17,4 @@ A voxel engine built in Python using Pygame, ModernGL, PyGLM, and Numba. It demo
 Install the required dependencies:
 ```bash
 python -m pip install pygame moderngl PyGLM numba
-py -m pip install opensimplex
+python -m pip install opensimplex
