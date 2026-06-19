@@ -8,10 +8,10 @@ MAJOR_VER, MINOR_VER = 3, 3
 DEPTH_SIZE = 24
 NUM_SAMPLES = 1  # antialiasing
 
-WIN_RESOLUTION = glm.vec2(1900, 800)
+WIN_RESOLUTION = glm.vec2(1920, 1080)
 
 # world generation
-SEED = 16
+SEED = 1589654
 
 # raycasting
 MAX_RAY_DIST = 7
@@ -35,7 +35,7 @@ CENTER_Y = WORLD_H * H_CHUNK_SIZE
 
 # camera
 ASPECT_RATIO = WIN_RESOLUTION.x / WIN_RESOLUTION.y
-FOG_DEG = 60
+FOG_DEG = 90
 V_FOV = glm.radians(FOG_DEG) # vertical fov
 H_FOV = 2 * math.atan(math.tan(V_FOV * 0.5) * ASPECT_RATIO) # horizontal fov
 NEAR = 0.1
