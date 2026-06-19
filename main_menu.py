@@ -4,6 +4,7 @@ from array import array
 import sys
 from settings import *
 
+
 class MainMenu:
     def __init__(self, app):
         self.app = app
@@ -20,8 +21,12 @@ class MainMenu:
         self.font_small = pg.font.Font(font_path, 24)
 
         self.bg_color = (0, 0, 0)
-        self.text_color = (230, 230, 230)
-        self.shadow_color = (90, 90, 90)
+        self.text_color = (255, 255, 255)
+        self.title_shadow_color = (0, 0, 0)
+
+        # Background image
+        self.background = pg.image.load("assets/background.png").convert()
+        self.background = pg.transform.scale(self.background, self.win_size)
 
         self.program = self.ctx.program(
             vertex_shader="""
@@ -62,6 +67,7 @@ class MainMenu:
         ])
 
         self.vbo = self.ctx.buffer(vertices.tobytes())
+
         self.vao = self.ctx.vertex_array(
             self.program,
             [(self.vbo, "2f 2f", "in_pos", "in_uv")]
@@ -78,45 +84,72 @@ class MainMenu:
         texture.filter = (mgl.NEAREST, mgl.NEAREST)
         return texture
 
+    def draw_text(self, surface, text, font, center, color=None):
+        if color is None:
+            color = self.text_color
+
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect(center=center)
+        surface.blit(text_surface, text_rect)
+
+    def draw_title_with_shadow(self, surface, text, font, center):
+        shadow_surface = font.render(text, True, self.title_shadow_color)
+        shadow_rect = shadow_surface.get_rect(
+            center=(center[0] + 4, center[1] + 4)
+        )
+        surface.blit(shadow_surface, shadow_rect)
+
+        title_surface = font.render(text, True, self.text_color)
+        title_rect = title_surface.get_rect(center=center)
+        surface.blit(title_surface, title_rect)
+
     def create_menu_texture(self):
         surface = pg.Surface(self.win_size)
-        surface.fill(self.bg_color)
 
-        title_shadow = self.font_title.render("VOXEL ENGINE", True, self.shadow_color)
-        title_shadow_rect = title_shadow.get_rect(
-            center=(self.width // 2, self.height // 2 - 115)
-        )
-        surface.blit(title_shadow, title_shadow_rect)
+        # Background
+        surface.blit(self.background, (0, 0))
 
-        title = self.font_title.render("VOXEL ENGINE", True, self.text_color)
-        title_rect = title.get_rect(
-            center=(self.width // 2, self.height // 2 - 120)
+        # Title with shadow
+        self.draw_title_with_shadow(
+            surface,
+            "VOXEL ENGINE",
+            self.font_title,
+            (self.width // 2, self.height // 2 - 120)
         )
-        surface.blit(title, title_rect)
 
-        info = self.font_small.render("Press ENTER to start", True, self.text_color)
-        info_rect = info.get_rect(
-            center=(self.width // 2, self.height // 2 + 80)
+        # Start text bez stínu
+        self.draw_text(
+            surface,
+            "Press ENTER to start",
+            self.font_small,
+            (self.width // 2, self.height // 2 + 80),
+            self.text_color
         )
-        surface.blit(info, info_rect)
 
-        esc_info = self.font_small.render("ESC to quit", True, self.shadow_color)
-        esc_info_rect = esc_info.get_rect(
-            center=(self.width // 2, self.height - 80)
+        # Quit text bez stínu
+        self.draw_text(
+            surface,
+            "Press ESCAPE to quit",
+            self.font_small,
+            (self.width // 2, self.height // 2 + 130),
+            self.text_color
         )
-        surface.blit(esc_info, esc_info_rect)
 
         return self.create_texture_from_surface(surface)
 
     def create_loading_texture(self, text=""):
         surface = pg.Surface(self.win_size)
-        surface.fill(self.bg_color)
 
-        loading_text = self.font_small.render(text, True, self.text_color)
-        loading_text_rect = loading_text.get_rect(
-            center=(self.width // 2, self.height // 2)
+        # Background
+        surface.blit(self.background, (0, 0))
+
+        self.draw_text(
+            surface,
+            text,
+            self.font_small,
+            (self.width // 2, self.height // 2),
+            self.text_color
         )
-        surface.blit(loading_text, loading_text_rect)
 
         return self.create_texture_from_surface(surface)
 
