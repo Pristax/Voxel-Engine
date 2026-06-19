@@ -20,7 +20,7 @@ class Scene:
         self.clouds.update()
 
     def render(self):
- # chunks rendering
+        # chunks rendering
         self.world.render()
 
         # rendering without cull face
