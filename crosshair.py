@@ -48,10 +48,10 @@ class Crosshair:
             # vertical bottom
             0.0, -gap_y,
             0.0, -size_y,
-        ], dtype='f4')
+        ], dtype = "f4")
 
         self.vbo = self.ctx.buffer(vertices)
-        self.vao = self.ctx.vertex_array(self.program, [(self.vbo, '2f', 'in_position')])
+        self.vao = self.ctx.vertex_array(self.program, [(self.vbo, "2f", "in_position")])
 
     def render(self):
         self.ctx.disable(mgl.DEPTH_TEST)

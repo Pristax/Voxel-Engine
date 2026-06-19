@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\meshes",
     "\\shaders",
     "\\world_objects"
   ],
+  "SelectedNode": "\\meshes\\chunk_mesh_builder.py",
   "PreviewInSolutionExplorer": false
 }
