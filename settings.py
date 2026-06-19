@@ -5,6 +5,9 @@ import math
 
 WIN_RESOLUTION = glm.vec2(1400, 700)
 
+# world generation
+SEED = 16
+
 # raycasting
 MAX_RAY_DIST = 7
 
@@ -31,13 +34,29 @@ FOG_DEG = 60
 V_FOV = glm.radians(FOG_DEG) # vertical fov
 H_FOV = 2 * math.atan(math.tan(V_FOV * 0.5) * ASPECT_RATIO) # horizontal fov
 NEAR = 0.1
-FAR = 1000.0
+FAR = 2000.0
 PITCH_MAX = glm.radians(89)
 
 # player
-PLAYER_SPEED = 0.008
+PLAYER_SPEED = 0.025 # 0.0008
 PLAYER_ROT_SPEED = 0.004
 PLAYER_POS = glm.vec3(CENTER_XZ, WORLD_H * 0.5 * CHUNK_SIZE, CENTER_XZ)
 MOUSE_SENSITIVITY = 0.002
 
 BG_COLOR = glm.vec3(0.45, 0.70, 1.0)
+
+# textures
+SAND = 1
+GRASS = 2
+DIRT = 3
+STONE = 4
+SNOW = 5
+LEAVES = 6
+WOOD = 7
+
+# terrain levels
+SNOW_LEVEL = 54
+STONE_LEVEL = 48
+DIRT_LEVEL = 40
+GRASS_LEVEL = 8
+SAND_LEVEL = 7
