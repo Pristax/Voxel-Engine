@@ -17,4 +17,4 @@ A voxel engine built in Python using Pygame, ModernGL, PyGLM, and Numba. It demo
 Install the required dependencies:
 ```bash
 python -m pip install pygame moderngl PyGLM numba
-py -m pip install opensimplex
+python -m pip install opensimplex
