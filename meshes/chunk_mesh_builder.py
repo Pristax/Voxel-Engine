@@ -80,8 +80,10 @@ def get_chunk_index(world_voxel_pos):
 @njit
 def is_void(local_voxel_pos, world_voxel_pos, world_voxels):
     chunk_index = get_chunk_index(world_voxel_pos)
+
     if chunk_index == -1:
-        return False
+        return True
+
     chunk_voxels = world_voxels[chunk_index]
 
     x, y, z = local_voxel_pos
@@ -89,6 +91,7 @@ def is_void(local_voxel_pos, world_voxel_pos, world_voxels):
 
     if chunk_voxels[voxel_index]:
         return False
+
     return True
 
 
