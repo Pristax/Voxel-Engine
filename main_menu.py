@@ -87,14 +87,16 @@ class MainMenu:
 			clock.tick(60)
 
 	def render(self):
+		pg.display.set_caption("Voxel Engine")
+
 		surface = pg.Surface(self.win_size)
 		surface.fill(self.bg_color)
 
-		title_shadow = self.font_title.render("V O X E L  E N G I N E", True, self.shadow_color)
+		title_shadow = self.font_title.render("VOXEL ENGINE", True, self.shadow_color)
 		title_shadow_rect = title_shadow.get_rect(center=(self.width // 2, self.height // 2 - 115))
 		surface.blit(title_shadow, title_shadow_rect)
 
-		title = self.font_title.render("V O X E L  E N G I N E", True, self.text_color)
+		title = self.font_title.render("VOXEL ENGINE", True, self.text_color)
 		title_rect = title.get_rect(center=(self.width // 2, self.height // 2 - 120))
 		surface.blit(title, title_rect)
 
@@ -124,6 +126,8 @@ class MainMenu:
 		texture.release()
 
 	def render_loading(self, text = ""):
+		pg.display.set_caption("Loading...")
+
 		surface = pg.Surface(self.win_size)
 		surface.fill(self.bg_color)
 
