@@ -3,6 +3,7 @@ A voxel engine built in Python using Pygame, ModernGL, PyGLM, and Numba. It demo
 
 <img width="1918" height="1078" alt="1" src="https://github.com/user-attachments/assets/d0e6db14-6e77-4c6d-8388-63617de86094" />
 <img width="1918" height="1078" alt="2" src="https://github.com/user-attachments/assets/0d49c442-0410-44d9-a87e-b7a149c55e5c" />
+<img width="1918" height="1078" alt="3" src="https://github.com/user-attachments/assets/e630760b-e337-4074-b479-06189efa5611" />
 
 ## Built With
 - Python 3.12.0
