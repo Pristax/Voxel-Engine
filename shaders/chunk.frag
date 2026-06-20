@@ -5,7 +5,6 @@ layout (location = 0) out vec4 fragColor;
 const vec3 gamma = vec3(2.2);
 const vec3 inv_gamma = 1.0 / gamma;
 
-// Zvedni/sniž podle chuti:
 const float AMBIENT_LIGHT = 0.55;
 const float DIRECT_LIGHT = 0.75;
 const float EXPOSURE = 1.0;
