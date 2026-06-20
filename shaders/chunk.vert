@@ -17,12 +17,12 @@ out vec3 voxel_color;
 out vec2 uv;
 out float shading;
 
-const float ao_values[4] = float[4](0.1, 0.25, 0.5, 1.0);
+const float ao_values[4] = float[4](0.45, 0.60, 0.80, 1.0);
 
 const float face_shading[6] = float[6](
-    1.0, 0.5,  // top bottom
-    0.5, 0.8,  // right left
-    0.5, 0.8   // front back
+    1.00, 0.70,  // top bottom
+    0.75, 0.90,  // right left
+    0.75, 0.90   // front back
 );
 
 const vec2 uv_coords[4] = vec2[4](
@@ -79,7 +79,3 @@ void main() {
 
     gl_Position = m_proj * m_view * m_model * vec4(in_position, 1.0);
 }
-
-
-
-

@@ -2,6 +2,7 @@ from numba import njit
 import numpy as np
 import glm
 import math
+import time
 
 # OpenGL settings
 MAJOR_VER, MINOR_VER = 3, 3
@@ -11,7 +12,8 @@ NUM_SAMPLES = 1  # antialiasing
 WIN_RESOLUTION = glm.vec2(1920, 1080)
 
 # world generation
-SEED = 1589654
+SEED = int(time.time())
+print("WORLD SEED:", SEED)
 
 # raycasting
 MAX_RAY_DIST = 7
@@ -43,9 +45,9 @@ FAR = 2000.0
 PITCH_MAX = glm.radians(89)
 
 # player
-PLAYER_SPEED = 0.025 # 0.0008
+PLAYER_SPEED = 0.02 # 0.0008
 PLAYER_ROT_SPEED = 0.004
-PLAYER_POS = glm.vec3(CENTER_XZ, WORLD_H * 0.5 * CHUNK_SIZE, CENTER_XZ)
+PLAYER_POS = glm.vec3(CENTER_XZ, WORLD_H * CHUNK_SIZE, CENTER_XZ)
 MOUSE_SENSITIVITY = 0.002
 
 BG_COLOR = glm.vec3(0.72, 0.88, 1.0)
@@ -70,6 +72,12 @@ SAND_LEVEL = 4
 TREE_PROBABILITY = 0.008
 TREE_WIDTH, TREE_HEIGHT = 5, 9
 TREE_H_WIDTH, TREE_H_HEIGHT = TREE_WIDTH // 2, TREE_HEIGHT // 2
+
+# spruce settings
+SPRUCE_PROBABILITY = 0.025
+SPRUCE_MIN_HEIGHT = 11
+SPRUCE_MAX_HEIGHT = 17
+SPRUCE_MAX_RADIUS = 4
 
 # water
 WATER_LINE = 5.6

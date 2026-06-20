@@ -69,12 +69,15 @@ class Chunk:
 
     @staticmethod
     def generate_trees(voxels, heightmap, cx, cz):
-        chance = int(TREE_PROBABILITY * 10000)
+        tree_chance = int(TREE_PROBABILITY * 10000)
+        spruce_chance = int(SPRUCE_PROBABILITY * 10000)
 
-        for x in range(TREE_H_WIDTH, CHUNK_SIZE - TREE_H_WIDTH):
+        max_width = max(TREE_H_WIDTH + 1, SPRUCE_MAX_RADIUS + 1)
+
+        for x in range(max_width, CHUNK_SIZE - max_width):
             wx = x + cx
 
-            for z in range(TREE_H_WIDTH, CHUNK_SIZE - TREE_H_WIDTH):
+            for z in range(max_width, CHUNK_SIZE - max_width):
                 wz = z + cz
 
                 y = int(heightmap[x + CHUNK_SIZE * z])
@@ -83,16 +86,22 @@ class Chunk:
                     continue
 
                 index = Chunk.get_index_py(x, y, z)
+                surface_voxel = voxels[index]
 
-                if voxels[index] != GRASS:
-                    continue
+                value = (
+                    wx * 928371
+                    + wz * 123457
+                    + y * 64513
+                    + SEED * 99991
+                ) % 10000
 
-                value = (wx * 928371 + wz * 123457 + y * 64513 + SEED * 99991) % 10000
+                if surface_voxel == GRASS:
+                    if value < tree_chance:
+                        Chunk.place_tree_py(voxels, x, y, z, wx, wz)
 
-                if value >= chance:
-                    continue
-
-                Chunk.place_tree_py(voxels, x, y, z, wx, wz)
+                elif surface_voxel == SNOW:
+                    if value < spruce_chance:
+                        Chunk.place_spruce_tree_py(voxels, x, y, z, wx, wz)
 
     @staticmethod
     def place_tree_py(voxels, x, y, z, wx=0, wz=0):
@@ -194,3 +203,90 @@ class Chunk:
                 voxels[Chunk.get_index_py(x, top_y - 1, z + 1)] = LEAVES
             if z - 1 >= 0:
                 voxels[Chunk.get_index_py(x, top_y - 1, z - 1)] = LEAVES
+
+    @staticmethod
+    def place_spruce_tree_py(voxels, x, y, z, wx=0, wz=0):
+        rnd = (
+            wx * 734287
+            + wz * 912931
+            + SEED * 19349663
+        ) & 0xFFFFFFFF
+
+        tree_height = SPRUCE_MIN_HEIGHT + rnd % (
+            SPRUCE_MAX_HEIGHT - SPRUCE_MIN_HEIGHT + 1
+        )
+
+        max_radius = SPRUCE_MAX_RADIUS
+
+        if y + tree_height + 2 >= CHUNK_SIZE:
+            return
+
+        if x - max_radius - 1 < 0 or x + max_radius + 1 >= CHUNK_SIZE:
+            return
+
+        if z - max_radius - 1 < 0 or z + max_radius + 1 >= CHUNK_SIZE:
+            return
+
+        voxels[Chunk.get_index_py(x, y, z)] = DIRT
+
+        for iy in range(1, tree_height + 1):
+            voxels[Chunk.get_index_py(x, y + iy, z)] = WOOD
+
+        top_y = y + tree_height
+
+        crown_start = y + 3
+
+        for py in range(crown_start, top_y + 1):
+            from_top = top_y - py
+
+            if from_top <= 1:
+                radius = 0
+            elif from_top <= 3:
+                radius = 1
+            elif from_top <= 6:
+                radius = 2
+            elif from_top <= 10:
+                radius = 3
+            else:
+                radius = max_radius
+
+            layer = py - crown_start
+            if layer % 3 == 1 and radius > 1:
+                radius -= 1
+
+            for lx in range(-radius, radius + 1):
+                px = x + lx
+
+                if px < 0 or px >= CHUNK_SIZE:
+                    continue
+
+                for lz in range(-radius, radius + 1):
+                    pz = z + lz
+
+                    if pz < 0 or pz >= CHUNK_SIZE:
+                        continue
+
+                    is_corner = abs(lx) == radius and abs(lz) == radius
+
+                    leaf_rand = (
+                        px * 438289
+                        + py * 912931
+                        + pz * 734287
+                        + SEED * 64513
+                    ) & 0xFFFFFFFF
+
+                    if is_corner and leaf_rand % 100 < 55:
+                        continue
+
+                    is_edge = abs(lx) == radius or abs(lz) == radius
+                    if radius >= 3 and is_edge and leaf_rand % 100 < 12:
+                        continue
+
+                    index = Chunk.get_index_py(px, py, pz)
+
+                    if voxels[index] != WOOD:
+                        voxels[index] = LEAVES
+
+        if top_y + 1 < CHUNK_SIZE:
+            voxels[Chunk.get_index_py(x, top_y + 1, z)] = LEAVES
+
