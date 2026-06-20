@@ -5,6 +5,14 @@ A voxel engine built in Python using Pygame, ModernGL, PyGLM, and Numba. It demo
 <img width="1918" height="1078" alt="2" src="https://github.com/user-attachments/assets/e630760b-e337-4074-b479-06189efa5611" />
 <img width="1918" height="1078" alt="3" src="https://github.com/user-attachments/assets/ae9d529f-c8c6-4143-bf87-2fd6e0f69336" />
 
+## Key Features:
+- Terrain Generation: Includes lakes, beaches, meadows, and snow-capped mountains.
+- Cave Generation: Integrated system for procedural cave networks.
+- Biomes & Vegetation: * Deciduous trees: Spawn naturally on grassy areas.
+- Spruces: Spawn specifically in snowy biomes.
+- Voxel Interaction: Full support for destroying and placing blocks.
+- User Interface: Includes a fully functional Main Menu and a Loading Screen.
+
 ## Built With
 - Python 3.12.0
 - Pygame 2.6.1
